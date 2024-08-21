@@ -49,6 +49,9 @@ object IntellijNotificationService : NotificationsService {
 
     private val LOGGER = PluginLogger<IntellijNotificationService>()
     private val ICON = IconLoader.getIcon("/META-INF/pluginIcon.svg", AutoDarkMode::class.java)
+    private val NOTIFICATION_GROUP by lazy {
+        NotificationGroupManager.getInstance().getNotificationGroup("com.github.weisj.darkmode")
+    }
 
     /*
      * Notifications may not be displayed of they are dispatched before the application frame has been
@@ -72,8 +75,7 @@ object IntellijNotificationService : NotificationsService {
     }
 
     override fun dispatchNotification(message: String, type: NotificationType, showSettingsLink: Boolean) {
-        val notificationGroup = NotificationGroupManager.getInstance().getNotificationGroup("com.github.weisj.darkmode")
-        val notification = notificationGroup.createNotification(
+        val notification = NOTIFICATION_GROUP.createNotification(
             title = "Auto Dark Mode",
             content = message,
             type = type.toIntelliJType()
